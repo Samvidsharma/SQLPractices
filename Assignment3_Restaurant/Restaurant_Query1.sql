@@ -4,17 +4,6 @@ Create Database ResturantManagementdb;
 
 Use ResturantManagementdb;
 
-Drop Table Customers;
-
-Create Table Customers
-(
-	CostumerId int Identity(1,1) Constraint PK_Customers Primary Key,
-	CostumerName varchar(50) NOT NULL,
-	DateOfBirth Date, 
-	PhoneNumber varchar(10) Constraint UQ_Customers_PhoneNumber Unique Constraint CHK_Costumers_PhoneNumber Check(len(PhoneNumber) = 10 and PhoneNumber like'^[789]\d{9}$'),
-	EmailId		varchar(50) Constraint UQ_Costumers_EmailId Unique,
-	CustomerAddressId int Constraint FK_Customers_CustomerAddress References CustomerAddress(AddressId)
-);
 
 Drop table CustomerAddress;
 Create Table CustomerAddress
@@ -28,6 +17,20 @@ Create Table CustomerAddress
 	[State] varchar(20) NOT NULL,
 	ZipCode varchar(6) NOT NULL Constraint CHK_CustomerAddress_ZipCode Check(ZipCode like '^\d{6}$')
  );
+
+Drop Table Customers;
+
+Create Table Customers
+(
+	CostumerId int Identity(1,1) Constraint PK_Customers Primary Key,
+	CostumerName varchar(50) NOT NULL,
+	DateOfBirth Date, 
+	PhoneNumber varchar(10) Constraint UQ_Customers_PhoneNumber Unique Constraint CHK_Costumers_PhoneNumber Check(len(PhoneNumber) = 10 and PhoneNumber like'^[789]\d{9}$'),
+	EmailId		varchar(50) Constraint UQ_Costumers_EmailId Unique,
+	CustomerAddressId int Constraint FK_Customers_CustomerAddress References CustomerAddress(AddressId)
+);
+
+
 
  Drop table ItemInfo;
  Create table ItemInfo
@@ -106,8 +109,9 @@ Create Table Reservations
 Drop table Orders;
 Create table Orders
 (
+	CustomerId int Constraint FK_Orders_Customers Foreign Key REFERENCES Customers(CostumerId),
 	OrderId int identity(1,1) Constraint PK_Orders Primary Key,
-	OrderTypeId int Constraint FK_Orders_OrderType REFERENCES OrderType(id),
+	OrderTypeId int Constraint FK_Orders_OrderType Foreign key REFERENCES OrderType(id),
 	WebAppOrAppName varchar(30),
 	ReservationId int Constraint FK_Orders_Reservations References Reservations(id)
 );
@@ -115,8 +119,8 @@ Create table Orders
 Drop table OrderedItems;
 Create Table OrderedItems
 (
-	CustomerId int Constraint FK_Orders_Customers REFERENCES Customers(CostumerId),
-	ItemId int Constraint FK_Orders_Items REFERENCES Items(ItemId), -- To show which item is ordered.
+	ItemId int Constraint FK_Orders_Items Foreign Key REFERENCES Items(ItemId), -- To show which item is ordered.
+	OrderId int Constraint FK_OrderedItems_Orders Foreign Key REFERENCES Orders(OrderId),
 	Quantity int NOT NULL Constraint DF_Orders_Quantity Default(1),
 	TotalPrice money NOT NULL,
 	DeliveryPersonId int Constraint FK_Orders_DeliveryPerson REFERENCES DeliveryPerson(DeliveryPersonId),
