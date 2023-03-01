@@ -1,0 +1,52 @@
+Entities - Tables
+=================
+1. Customers.
+2. Customer Address.
+2. Items.
+3. Orders.
+4. DeliveryPerson.
+==========================
+1.Customers
+------------
+CostumerId  	Int         Primary Key
+Name 	 	varchar(50)
+DateOfBirth  	Date
+Phone number 	varchar(10) Unique
+emailId		varchar(50) Unique
+=======================================
+
+2.Items
+-----------
+ItemId 		Int         Primary Key
+Name 	 	varchar(50) Unique 
+Description 	text. 
+Price 		money.
+PriceDescription varchar(20)
+
+==============================
+3.DeliveryPerson
+----------------
+Id 		int	    PrimaryKey.
+Name 		varchar(50) 
+PhoneNumber 	varchar(10) Unique.
+BikeNumber	varchar(10) Unique.
+============================================
+
+4.Orders
+-----------
+OrderId  	Int         Primary Key
+CostumerId      int 	    Foreign key from customers table.
+ItemId 		int 	    Foreign key from Orders table.
+Price		money       Foreign key from Items Table.
+Quantity 	int 	    
+TotalPrice      money.
+DeliveyBoyId    int 	    Foreign Key from DeliveryPerson table.
+OrderedTime 	datetime2
+DeliveredTime	datetime2
+============================================================
+
+
+
+
+
+
